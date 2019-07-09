@@ -57,19 +57,26 @@ namespace AdsDistribution
                         Message = settings.Message,
                         Attachments = photo
                     });
-                    PrintSuccessGroupSend(id);
+                    Console.WriteLine("Сделан пост в " + TryGetGroupName(id));
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Не удалось сделать пост в " + id);
+                    Console.WriteLine("Не удалось сделать пост в " + TryGetGroupName(id));
                 }
             }
         }
 
-        private void PrintSuccessGroupSend(string groupId)
+        private string TryGetGroupName(string groupId)
         {
-            var group = vk.Groups.GetById(settings.GroupsIds, groupId, null)[0];
-            Console.WriteLine("Сделан пост в " + group.Name);
+            try
+            {
+                var group = vk.Groups.GetById(null, groupId, null);
+                return group[0].Name;
+            }
+            catch (Exception)
+            {
+                return "id" + groupId;
+            }
         }
     }
 }
