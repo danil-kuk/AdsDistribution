@@ -15,5 +15,7 @@ namespace AdsDistribution
         public List<ulong> GroupsIds { get; set; }
 
         public string Message { get; set; }
+
+        public List<string> PhotoIds { get; set; }
     }
 }

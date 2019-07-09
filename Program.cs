@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace AdsDistribution
@@ -9,11 +10,7 @@ namespace AdsDistribution
     {
         static void Main(string[] args)
         {
-            var config = "";
-            using (StreamReader source = new StreamReader("config.json"))
-            {
-                config = source.ReadToEnd();
-            }
+            var config = File.ReadAllText("config.txt");
             var settings = JsonConvert.DeserializeObject<ConfigSettings>(config);
             var sender = new AdsSender(settings);
             sender.SendAds(settings.GroupsIds);

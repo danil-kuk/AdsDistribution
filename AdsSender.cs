@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using VkNet;
 using VkNet.Enums.Filters;
@@ -32,12 +33,19 @@ namespace AdsDistribution
 
         public void SendAds(List<ulong> groupsIds)
         {
+            var photoIds = new List<string>();
+            foreach (var photoId in settings.PhotoIds)
+            {
+                photoIds.Add($"{vk.UserId}_{photoId}");
+            }
+            var photo = vk.Photo.GetById(photoIds);
             foreach (var id in groupsIds)
             {
                 vk.Wall.Post(new WallPostParams
                 {
                     OwnerId = -(long)id,
-                    Message = settings.Message
+                    Message = settings.Message,
+                    Attachments = photo
                 });
             }
         }
