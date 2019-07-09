@@ -5,6 +5,7 @@ using System.Text;
 using VkNet;
 using VkNet.Enums.Filters;
 using VkNet.Model;
+using VkNet.Model.Attachments;
 using VkNet.Model.RequestParams;
 
 namespace AdsDistribution
@@ -46,7 +47,7 @@ namespace AdsDistribution
             {
                 photoIds.Add($"{vk.UserId}_{photoId}");
             }
-            var photo = vk.Photo.GetById(photoIds);
+            var photo = TryGetPhotos(photoIds);
             foreach (var id in groupsIds)
             {
                 try
@@ -62,6 +63,27 @@ namespace AdsDistribution
                 catch (Exception)
                 {
                     Console.WriteLine("Не удалось сделать пост в " + TryGetGroupName(id));
+                }
+            }
+        }
+
+        private IReadOnlyCollection<Photo> TryGetPhotos(List<string> photoIds)
+        {
+            try
+            {
+                return vk.Photo.GetById(photoIds);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Не удалось получить фото");
+                while (true) // Continue asking until a correct answer is given.
+                {
+                    Console.WriteLine("Сделать пост без фото [Y/N]?");
+                    string answer = Console.ReadLine().ToUpper();
+                    if (answer == "Y")
+                        return null;
+                    if (answer == "N")
+                        Environment.Exit(-1);
                 }
             }
         }
