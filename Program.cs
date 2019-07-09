@@ -10,10 +10,27 @@ namespace AdsDistribution
     {
         static void Main(string[] args)
         {
-            var config = File.ReadAllText("config.txt");
+            var config = "";
+            try
+            {
+                config = File.ReadAllText("config.txt");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка! Не найден файл config.txt");
+            }
             var settings = JsonConvert.DeserializeObject<ConfigSettings>(config);
             var sender = new AdsSender(settings);
-            sender.SendAds(settings.GroupsIds);
+            try
+            {
+                sender.SendAds(settings.GroupsIds);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Возникла ошибка! Ну удалось сделать рассылку");
+            }
+            Console.WriteLine("Работа завершена, нажмите любую клавишу для выхода");
+            Console.ReadKey();
         }
     }
 }

@@ -17,7 +17,15 @@ namespace AdsDistribution
         public AdsSender(ConfigSettings settings)
         {
             this.settings = settings;
-            Auth();
+            try
+            {
+                Auth();
+                Console.WriteLine("Вход выполнен");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Ошибка авторизации! Проверьте данные в файле config.txt");
+            }
         }
 
         private void Auth()
@@ -31,7 +39,7 @@ namespace AdsDistribution
             });
         }
 
-        public void SendAds(List<ulong> groupsIds)
+        public void SendAds(List<string> groupsIds)
         {
             var photoIds = new List<string>();
             foreach (var photoId in settings.PhotoIds)
@@ -41,13 +49,27 @@ namespace AdsDistribution
             var photo = vk.Photo.GetById(photoIds);
             foreach (var id in groupsIds)
             {
-                vk.Wall.Post(new WallPostParams
+                try
                 {
-                    OwnerId = -(long)id,
-                    Message = settings.Message,
-                    Attachments = photo
-                });
+                    vk.Wall.Post(new WallPostParams
+                    {
+                        OwnerId = long.Parse("-" + id),
+                        Message = settings.Message,
+                        Attachments = photo
+                    });
+                    PrintSuccessGroupSend(id);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Не удалось сделать пост в " + id);
+                }
             }
+        }
+
+        private void PrintSuccessGroupSend(string groupId)
+        {
+            var group = vk.Groups.GetById(settings.GroupsIds, groupId, null)[0];
+            Console.WriteLine("Сделан пост в " + group.Name);
         }
     }
 }

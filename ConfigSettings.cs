@@ -12,7 +12,7 @@ namespace AdsDistribution
 
         public ulong AppId { get; set; }
 
-        public List<ulong> GroupsIds { get; set; }
+        public List<string> GroupsIds { get; set; }
 
         public string Message { get; set; }
 
