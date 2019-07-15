@@ -76,7 +76,7 @@ namespace AdsDistribution
             catch (Exception)
             {
                 Console.WriteLine("Не удалось получить фото");
-                while (true) // Continue asking until a correct answer is given.
+                while (true)
                 {
                     Console.WriteLine("Сделать пост без фото [Y/N]?");
                     string answer = Console.ReadLine().ToUpper();

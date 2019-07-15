@@ -27,7 +27,7 @@ namespace AdsDistribution
             }
             catch (Exception)
             {
-                Console.WriteLine("Возникла ошибка! Ну удалось сделать рассылку");
+                Console.WriteLine("Возникла ошибка! Не удалось сделать рассылку");
             }
             Console.WriteLine("Работа завершена, нажмите любую клавишу для выхода");
             Console.ReadKey();
